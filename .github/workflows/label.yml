@@ -6,14 +6,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - uses: actions/checkout@v2
       - name: Bump version and push tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.0
-        tag_prefix: release-v
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag_prefix: release-v
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
         with:
