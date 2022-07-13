@@ -1,12 +1,23 @@
-name: Bump version
+
+name: Make Release
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      bump:
+        type: choice
+        description: 'Bump level'
+        options:
+          - patch
+          - minor
+          - major
+        required: true
 jobs:
-  build:
+  tag_release:
     runs-on: ubuntu-latest
-    environment: production
     steps:
       - uses: actions/checkout@v2
       - name: Bump version and push tag
@@ -19,5 +30,5 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.tag_version.outputs.new_tag }}
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          name: ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
