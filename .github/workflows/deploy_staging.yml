@@ -1,0 +1,23 @@
+name: Staging Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  main:
+    name: Deployment
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: 'https://my.staging.bearer.sh'
+    steps:
+    # Runs a single command using the runners shell
+    - name: Send greeting
+      run: echo "Simulated Deploy"
