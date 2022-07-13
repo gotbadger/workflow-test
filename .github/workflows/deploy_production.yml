@@ -5,7 +5,7 @@ on:
     tags:
       - "*"
   workflow_run:
-    workflow: release
+    workflows: [Make Release]
     types:
       - completed
 
