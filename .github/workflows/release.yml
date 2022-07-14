@@ -24,7 +24,7 @@ jobs:
         uses: LASER-Yi/workflow-status@v0.0.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          workflow: deploy_staging.yml
+          workflow: deploy-staging.yml
           event: completed
 
   tag_release:
