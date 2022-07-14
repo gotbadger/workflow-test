@@ -1,4 +1,2 @@
 # workflow-test
-hello world
-
-second.
+This repo is for testing how things work
