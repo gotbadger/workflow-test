@@ -16,15 +16,27 @@ on:
           - patch
         required: true
 jobs:
-  tag_release:
+  verify_staging_deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Validate Release
-        uses: xembly/validate-workflow-status@v1
+        uses: LASER-Yi/workflow-status@v0.0.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          workflow: 'Staging Deploy'
+          workflow: deploy_staging.yml
+          event: completed
+
+  tag_release:
+    needs: verify_staging_deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Validate Release
+        uses: LASER-Yi/workflow-status@v0.0.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          workflow: deploy_staging.yml
       - name: Bump version and push tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.0
