@@ -11,9 +11,9 @@ on:
         type: choice
         description: 'Bump level'
         options:
-          - patch
           - minor
           - major
+          - patch
         required: true
 jobs:
   tag_release:
