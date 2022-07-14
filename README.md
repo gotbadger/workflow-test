@@ -1,4 +1,4 @@
 # workflow-test
 hello world
 
-second
+second.
