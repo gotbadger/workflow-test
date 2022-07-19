@@ -3,7 +3,7 @@ name: Production Deploy
 on:
   push:
     tags:
-      - "*"
+      - "release*"
   workflow_run:
     workflows: [Make Release]
     types:
@@ -21,6 +21,7 @@ jobs:
       name: production
       url: 'https://my.bearer.sh'
     steps:
-    # Runs a single command using the runners shell
+    - name: Simulate Delay
+      run: sleep 120
     - name: Send greeting
       run: echo "Simulated Deploy"
