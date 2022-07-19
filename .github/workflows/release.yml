@@ -19,13 +19,13 @@ jobs:
   verify_staging_deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Validate Release
-        uses: LASER-Yi/workflow-status@v0.0.2
+      - name: Wait for staging deploy to suceed succeed
+        uses: lewagon/wait-on-check-action@v1.0.0
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          workflow: deploy-staging.yml
-          event: completed
+          ref: ${{ github.ref }}
+          check-name: 'Staging Deploy'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
 
   tag_release:
     needs: verify_staging_deploy
