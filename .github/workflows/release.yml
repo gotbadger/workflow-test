@@ -16,7 +16,8 @@ on:
           - patch
         required: true
 jobs:
-  verify_staging_deploy:
+  tag_release:
+    needs: verify_staging_deploy
     runs-on: ubuntu-latest
     steps:
       - name: Wait for staging deploy to suceed succeed
@@ -26,11 +27,6 @@ jobs:
           check-name: 'Staging Deploy'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
-
-  tag_release:
-    needs: verify_staging_deploy
-    runs-on: ubuntu-latest
-    steps:
       - uses: actions/checkout@v2
       - name: Validate Release
         uses: LASER-Yi/workflow-status@v0.0.2

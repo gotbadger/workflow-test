@@ -18,6 +18,7 @@ jobs:
       name: staging
       url: 'https://my.staging.bearer.sh'
     steps:
-    # Runs a single command using the runners shell
+    - name: Simulate Delay
+      run: sleep 180
     - name: Send greeting
       run: echo "Simulated Deploy"
