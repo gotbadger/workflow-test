@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: staging
-      url: 'https://my.staging.bearer.sh'
+      url: 'https://staging.example.com'
     steps:
     - name: Simulate Delay
       run: sleep 120
