@@ -21,14 +21,7 @@ jobs:
       name: production
       url: 'https://example.com'
     steps:
-    - uses: olegtarasov/get-tag@v2.1
-      id: tagName
-    - name: GitHub Tag Name example
-      run: |
-       echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
-       echo "Tag name from github.ref_name: ${{ github.ref_name }}"
-       echo "Tag name from github.ref_name: ${{ steps.tagName.outputs.tag }}"
     - name: Simulate Delay
       run: sleep 120
     - name: Send greeting
-      run: echo "Simulated Deploy https://github.com/gotbadger/workflow-test/releases/tag/${{ github.ref_name }}"
+      run: echo "Simulated Deploy https://github.com/gotbadger/workflow-test/releases/latest"
