@@ -15,9 +15,7 @@ concurrency:
 
 jobs:
   main:
-    if: >-
-      github.event.push ||
-      github.event.workflow_run.conclusion == 'success'
+    if: ${{ github.event_name == "push" || github.event.workflow_run.conclusion == 'success' }}
     name: Deployment
     runs-on: ubuntu-latest
     environment:
