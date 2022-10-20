@@ -19,6 +19,6 @@ jobs:
       url: 'https://staging.example.com'
     steps:
     - name: Simulate Delay
-      run: sleep 120
+      run: sleep 60
     - name: Send greeting
       run: echo "Simulated Deploy"
