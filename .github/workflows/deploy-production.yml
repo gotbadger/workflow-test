@@ -32,7 +32,7 @@ jobs:
           default_bump: patch
     outputs:
       ref: refs/tags/${{ steps.tag_version.outputs.new_tag || github.ref_name }}
-      tag_name: steps.tag_version.outputs.new_tag || github.ref_name
+      tag_name: ${{ steps.tag_version.outputs.new_tag || github.ref_name }}
 
   create-release:
     needs: [tag]
@@ -64,8 +64,8 @@ jobs:
       - name: Send greeting
         run: echo "Simulated Deploy https://github.com/gotbadger/workflow-test/releases/latest"
     outputs:
-      tag_name: needs.tag.outputs.tag_name
-      ref: steps.tag.outputs.ref
+      tag_name: ${{ needs.tag.outputs.tag_name }}
+      ref: ${{ steps.tag.outputs.ref }}
 
   publish-release:
     needs: [main]
