@@ -40,7 +40,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Send greeting
-        run: echo "Creating Release ${{needs.main.outputs.tag_name}}"
+        run: echo "Creating Release ${{ needs.main.outputs.tag_name }}"
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
         with:
@@ -49,7 +49,6 @@ jobs:
           generateReleaseNotes: true
   main:
     needs: [tag, create-release]
-    if: ${{ github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
     name: Deployment
     runs-on: ubuntu-latest
     environment:
