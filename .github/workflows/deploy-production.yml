@@ -1,20 +1,52 @@
 name: Production Deploy
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - "release*"
-  workflow_run:
-    workflows: [Make Release]
-    types:
-      - completed
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Wait for staging deploy to complete
+        uses: lewagon/wait-on-check-action@v1.0.0
+        with:
+          ref: ${{ github.ref }}
+          check-name: 'Deployment'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+      - name: Bump version and push tag
+        if: startsWith(github.ref, 'refs/tags') != true
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag_prefix: release-v
+          default_bump: patch
+    outputs:
+      ref: refs/tags/${{ steps.tag_version.outputs.new_tag || github.ref_name }}
+      tag_name: steps.tag_version.outputs.new_tag || github.ref_name
+
+  create-release:
+    needs: [tag]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ needs.tag.outputs.tag_name }}
+          name: ${{ needs.tag.outputs.tag_name }}
+          generateReleaseNotes: true
   main:
+    needs: [tag, create-release]
     if: ${{ github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
     name: Deployment
     runs-on: ubuntu-latest
@@ -22,7 +54,30 @@ jobs:
       name: production
       url: 'https://example.com'
     steps:
-    - name: Simulate Delay
-      run: sleep 60
-    - name: Send greeting
-      run: echo "Simulated Deploy https://github.com/gotbadger/workflow-test/releases/latest"
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ needs.tag.outputs.ref }}
+      - name: Simulate Delay
+        run: sleep 60
+      - name: Send greeting
+        run: echo "Simulated Deploy https://github.com/gotbadger/workflow-test/releases/latest"
+    outputs:
+      tag_name: needs.tag.outputs.tag_name
+      ref: steps.tag.outputs.ref
+
+  publish-release:
+    needs: [main]
+    if: ${{ success() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send greeting
+        run: echo "Deploy OK ${{needs.main.outputs.tag_name}}"
+
+  check_fail:
+    needs: [main]
+    if: ${{ failure() }}
+    name: Check For Fail
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send greeting
+        run: echo "Deploy FAILED ${{needs.main.outputs.tag_name}}"
