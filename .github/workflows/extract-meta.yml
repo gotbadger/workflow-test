@@ -1,0 +1,22 @@
+name: Extract Meta
+on:
+  workflow_dispatch:
+
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - id: default-branch-name
+        shell: bash
+        run: |
+          echo $(curl -s https://api.github.com/repos/${{ github.repository }} -H "Authorization: bearer ${{ github.token }}" | jq -r .default_branch)
+      - id: sha
+        shell: bash
+        run: |
+          echo ${{github.sha}}
+      - id: current-branch-name
+        shell: bash
+        run: |
+          echo ${{github.ref_name}}
