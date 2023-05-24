@@ -12,6 +12,10 @@ jobs:
         shell: bash
         run: |
           echo ${{ github.event.repository.default_branch }}
+      - id: repo_url
+        shell: bash
+        run: |
+           echo ${{github.event.repository.repository_url}}
       - id: sha
         shell: bash
         run: |
@@ -20,7 +24,5 @@ jobs:
         shell: bash
         run: |
           echo ${{github.ref_name}}
-     - id: repo_url
-        shell: bash
-        run: |
-          echo ${{github..event.repository.repository_url}}
+     
+
