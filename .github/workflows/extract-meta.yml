@@ -11,7 +11,7 @@ jobs:
       - id: default-branch-name
         shell: bash
         run: |
-          echo $(curl -s https://api.github.com/repos/${{ github.repository }} -H "Authorization: bearer ${{ github.token }}" | jq -r .default_branch)
+          echo ${{ github.event.repository.default_branch }}
       - id: sha
         shell: bash
         run: |
