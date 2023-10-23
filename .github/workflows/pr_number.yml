@@ -1,4 +1,4 @@
-name: "pr_number"
+name: "PR Number"
 on:
   workflow_dispatch:
   pull_request:
@@ -14,7 +14,10 @@ jobs:
   number:
     runs-on: ubuntu-latest
     env:
-      PR_NUMBER: "Hello"
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      SHA: ${{ github.event.pull_request.head.sha }}
     steps:
-      - name: "check contents"
+      - name: "check PR_NUMBER"
         run: echo "Value is $PR_NUMBER"
+      - name: "check SHA"
+        run: echo "Value is $SHA"
