@@ -1,0 +1,20 @@
+name: "pr_number"
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main
+      
+permissions:
+  contents: read
+
+jobs:
+  number:
+    runs-on: ubuntu-latest
+    env:
+      PR_NUMBER: "Hello"
+    steps:
+      - name: "check contents"
+        run: echo "Value is $PR_NUMBER"
