@@ -14,8 +14,8 @@ jobs:
   number:
     runs-on: ubuntu-latest
     env:
-      PR_NUMBER: ${{ github.event.pull_request.number }}
-      SHA: ${{ github.event.pull_request.head.sha }}
+      PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.pull_request }}
+      SHA: ${{ github.event.pull_request.head.sha || github.sha }}
     steps:
       - name: "check PR_NUMBER"
         run: echo "Value is $PR_NUMBER"
